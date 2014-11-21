@@ -520,8 +520,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
 			dev_info(dev, "SetAddress Request (%d) to port %d\n",
 				 ctrlreq->wValue, vdev->rhport);
 
-			if (vdev->udev)
-				usb_put_dev(vdev->udev);
+			usb_put_dev(vdev->udev);
 			vdev->udev = usb_get_dev(urb->dev);
 
 			spin_lock(&vdev->ud.lock);
@@ -542,8 +541,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
 						  "Get_Descriptor to device 0 "
 						  "(get max pipe size)\n");
 
-			if (vdev->udev)
-				usb_put_dev(vdev->udev);
+			usb_put_dev(vdev->udev);
 			vdev->udev = usb_get_dev(urb->dev);
 			goto out;
 
@@ -832,8 +830,7 @@ static void vhci_device_reset(struct usbip_device *ud)
 	vdev->speed  = 0;
 	vdev->devid  = 0;
 
-	if (vdev->udev)
-		usb_put_dev(vdev->udev);
+	usb_put_dev(vdev->udev);
 	vdev->udev = NULL;
 
 	if (ud->tcp_socket) {
