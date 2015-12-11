@@ -134,8 +134,6 @@ ENTRY(cpu_do_switch_mm)
 	ret
 ENDPROC(cpu_do_switch_mm)
 
-	.section ".text.init", #alloc, #execinstr
-
 /*
  *	__cpu_setup
  *
