@@ -956,8 +956,16 @@ int nilfs_set_file_dirty(struct inode *inode, unsigned nr_dirty)
 
 int nilfs_mark_inode_dirty(struct inode *inode)
 {
+	struct the_nilfs *nilfs = inode->i_sb->s_fs_info;
 	struct buffer_head *ibh;
 	int err;
+
+	/*
+	 * Do not dirty inodes after the log writer has been detached
+	 * and its nilfs_root struct has been freed.
+	 */
+	if (unlikely(nilfs_purging(nilfs)))
+		return 0;
 
 	err = nilfs_load_inode_block(inode, &ibh);
 	if (unlikely(err)) {
