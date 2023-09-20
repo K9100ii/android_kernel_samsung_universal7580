@@ -90,7 +90,10 @@ static int vhci_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
 		return -EBUSY;
 
 	memcpy(skb_push(skb, 1), &bt_cb(skb)->pkt_type, 1);
+
+	mutex_lock(&data->open_mutex);
 	skb_queue_tail(&data->readq, skb);
+	mutex_unlock(&data->open_mutex);
 
 	wake_up_interruptible(&data->read_wait);
 	return 0;
